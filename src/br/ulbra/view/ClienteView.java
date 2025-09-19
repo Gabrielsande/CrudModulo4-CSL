@@ -22,8 +22,26 @@ public class ClienteView extends javax.swing.JFrame {
      */
     public ClienteView() {
         initComponents();
+        controller = new ClienteController();
+        this.setLocationRelativeTo(null);
         initTableModel();
         atualizarTabela();
+        setBotoes(0);
+    }
+
+    public void setBotoes(int op) {
+        switch (op) {
+            case 1:
+                btnSalvar.setEnabled(false);
+                btnAlterar.setEnabled(true);
+                btnExcluir.setEnabled(true);
+                break;
+            default:
+                btnSalvar.setEnabled(true);
+                btnAlterar.setEnabled(false);
+                btnExcluir.setEnabled(false);
+
+        }
     }
 
     private void initTableModel() {
@@ -37,7 +55,17 @@ public class ClienteView extends javax.swing.JFrame {
         };
         tbCliente.setModel(model);
     }
-    private ClienteController controller;
+
+    private void limparCampos() {
+        txtId.setText("");
+        txtNome.setText("");
+        txtEmail.setText("");
+        txtTelefone.setText("");
+        DefaultTableModel model = (DefaultTableModel) tbCliente.getModel();
+        model.setRowCount(0);  // apaga todas as linhas;
+    }
+
+    private final ClienteController controller;
 
     private void atualizarTabela() {
         try {
@@ -139,12 +167,27 @@ public class ClienteView extends javax.swing.JFrame {
 
         btnAlterar.setIcon(new javax.swing.ImageIcon("C:\\Users\\aluno.saolucas\\Downloads\\CrudAlterar.png")); // NOI18N
         btnAlterar.setText("ALTERAR");
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
 
         btnExcluir.setIcon(new javax.swing.ImageIcon("C:\\Users\\aluno.saolucas\\Downloads\\CrudExcluir.png")); // NOI18N
         btnExcluir.setText("EXCLUIR");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnLimpar.setIcon(new javax.swing.ImageIcon("C:\\Users\\aluno.saolucas\\Downloads\\CrudLimpar.png")); // NOI18N
         btnLimpar.setText("LIMPAR");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
         btnListar.setIcon(new javax.swing.ImageIcon("C:\\Users\\aluno.saolucas\\Downloads\\CrudListar.png")); // NOI18N
         btnListar.setText("LISTAR");
@@ -168,6 +211,11 @@ public class ClienteView extends javax.swing.JFrame {
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+        });
+        tbCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbClienteMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tbCliente);
@@ -245,10 +293,10 @@ public class ClienteView extends javax.swing.JFrame {
                     .addComponent(btnExcluir)
                     .addComponent(btnLimpar))
                 .addGap(29, 29, 29)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnListar)
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         pack();
@@ -259,16 +307,85 @@ public class ClienteView extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNomeActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        // TODO add your handling code here:
+        try {
+            String nome = txtNome.getText().trim();
+            String email = txtEmail.getText().trim();
+            String tel = txtTelefone.getText().trim();
+            if (nome.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Nome é obrigatório");
+                return;
+            }
+            Cliente c = new Cliente(0, nome, email, tel);
+            controller.salvar(c);
+            javax.swing.JOptionPane.showMessageDialog(this, "Cliente salvo (ID=" + c.getId() + ")");
+            atualizarTabela();
+            limparCampos();
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao salvar: " + ex.getMessage());
+
+        }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
-        // TODO add your handling code here:
+        atualizarTabela();
+        setBotoes(0);
     }//GEN-LAST:event_btnListarActionPerformed
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        try {
+            int id = Integer.parseInt(txtId.getText());
+            String nome = txtNome.getText().trim();
+            String email = txtEmail.getText().trim();
+            String tel = txtTelefone.getText().trim();
+            Cliente c = new Cliente(id, nome, email, tel);
+            controller.atualizar(c);
+            javax.swing.JOptionPane.showMessageDialog(this, "Atualizado com sucesso");
+            atualizarTabela();
+            limparCampos();
+        } catch (NumberFormatException nfe) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecione um cliente para atualizar");
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao atualizar: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        try {
+            int id = Integer.parseInt(txtId.getText());
+            int confirm = javax.swing.JOptionPane.showConfirmDialog(this, "Remover cliente ID " + id + "?", "Confirma", javax.swing.JOptionPane.YES_NO_OPTION);
+            if (confirm != javax.swing.JOptionPane.YES_OPTION) {
+                return;
+            }
+            controller.remover(id);
+            javax.swing.JOptionPane.showMessageDialog(this, "Removido");
+            atualizarTabela();
+            limparCampos();
+        } catch (NumberFormatException nfe) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecione um cliente para remover");
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao remover: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void tbClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbClienteMouseClicked
+        int row = tbCliente.getSelectedRow();
+        if (row >= 0) {
+            txtId.setText(tbCliente.getValueAt(row, 0).toString());
+            txtNome.setText(tbCliente.getValueAt(row, 1).toString());
+            txtEmail.setText(tbCliente.getValueAt(row, 2) != null ? tbCliente.getValueAt(row, 2).toString() : "");
+            txtTelefone.setText(tbCliente.getValueAt(row, 3) != null ? tbCliente.getValueAt(row, 3).toString() : "");
+        }
+    }//GEN-LAST:event_tbClienteMouseClicked
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        txtId.setText(null);
+        txtNome.setText(null);
+        txtEmail.setText(null);
+        txtTelefone.setText(null);    }//GEN-LAST:event_btnLimparActionPerformed
 
     /**
      * @param args the command line arguments
