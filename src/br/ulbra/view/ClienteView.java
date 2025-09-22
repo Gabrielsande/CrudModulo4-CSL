@@ -65,7 +65,7 @@ public class ClienteView extends javax.swing.JFrame {
         model.setRowCount(0);  // apaga todas as linhas;
     }
 
-    private final ClienteController controller;
+    private ClienteController controller;
 
     private void atualizarTabela() {
         try {
@@ -373,6 +373,7 @@ public class ClienteView extends javax.swing.JFrame {
 
     private void tbClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbClienteMouseClicked
         int row = tbCliente.getSelectedRow();
+        setBotoes(1);
         if (row >= 0) {
             txtId.setText(tbCliente.getValueAt(row, 0).toString());
             txtNome.setText(tbCliente.getValueAt(row, 1).toString());
