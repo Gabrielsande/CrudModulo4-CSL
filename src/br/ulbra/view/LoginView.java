@@ -5,6 +5,11 @@
  */
 package br.ulbra.view;
 
+import br.ulbra.DAO.UsuarioDAO;
+import br.ulbra.model.Usuario;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author aluno.saolucas
@@ -44,6 +49,11 @@ public class LoginView extends javax.swing.JFrame {
         jLabel3.setText("Senha");
 
         btnEntrarLog.setText("ENTRAR");
+        btnEntrarLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEntrarLogActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,7 +89,7 @@ public class LoginView extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtSenhaLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSenhaLog, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(btnEntrarLog)
                 .addContainerGap(47, Short.MAX_VALUE))
@@ -87,6 +97,34 @@ public class LoginView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnEntrarLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarLogActionPerformed
+        String login = txtLogin.getText();
+        String senha = txtSenhaLog.getText(); // se for JPasswordField, use new String(TxtSenha.getPassword())
+
+        if (login.isEmpty() || senha.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Preencha login e senha!");
+            return;
+        }
+
+        try {
+            UsuarioDAO dao = new UsuarioDAO();
+            Usuario usuario = dao.autenticar(login, senha);
+
+            if (usuario != null) {
+                JOptionPane.showMessageDialog(this, "Bem-vindo, " + usuario.getNome() + "!");
+                // Abrir o MenuPrincipalView passando o usuário autenticado
+                new MenuPrincipalView(usuario).setVisible(true);
+                this.dispose(); // fecha a tela de login
+            } else {
+                JOptionPane.showMessageDialog(this, "Login ou senha inválidos, ou usuário inativo.");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao conectar no banco: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
+    }//GEN-LAST:event_btnEntrarLogActionPerformed
 
     /**
      * @param args the command line arguments

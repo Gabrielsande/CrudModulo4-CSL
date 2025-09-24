@@ -5,6 +5,8 @@
  */
 package br.ulbra.view;
 
+import br.ulbra.model.Usuario;
+
 /**
  *
  * @author aluno.saolucas
@@ -14,8 +16,20 @@ public class MenuPrincipalView extends javax.swing.JFrame {
     /**
      * Creates new form MenuPrincipalView
      */
-    public MenuPrincipalView() {
+    
+    private final Usuario usuarioLogado;
+    
+    public MenuPrincipalView(Usuario usuarioLogado) {
         initComponents();
+        this.setLocationRelativeTo(null);
+        this.usuarioLogado= usuarioLogado;
+        configurarUsuario();
+    }
+    
+    private void configurarUsuario(){
+        setTitle("CRUD - Logado como:"+usuarioLogado.getNome()+" ("+usuarioLogado.getLogin() +")");
+        boolean podeGerenciarUsuarios = "admin".equalsIgnoreCase(usuarioLogado.getLogin());
+        itemUsuario.setEnabled(podeGerenciarUsuarios);
     }
 
     /**
@@ -27,10 +41,10 @@ public class MenuPrincipalView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuBar1 = new javax.swing.JMenuBar();
+        itemUsuario = new javax.swing.JMenuBar();
         MnCadastro = new javax.swing.JMenu();
-        mnCliente = new javax.swing.JMenu();
-        mnUsuario = new javax.swing.JMenu();
+        mnCliente = new javax.swing.JMenuItem();
+        mnUsuario = new javax.swing.JMenuItem();
         mnSobre = new javax.swing.JMenu();
         mnSair = new javax.swing.JMenuItem();
 
@@ -54,7 +68,7 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         });
         MnCadastro.add(mnUsuario);
 
-        jMenuBar1.add(MnCadastro);
+        itemUsuario.add(MnCadastro);
 
         mnSobre.setText("Sobre");
 
@@ -66,9 +80,9 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         });
         mnSobre.add(mnSair);
 
-        jMenuBar1.add(mnSobre);
+        itemUsuario.add(mnSobre);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(itemUsuario);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -84,6 +98,10 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void mnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnSairActionPerformed
+        dispose();
+    }//GEN-LAST:event_mnSairActionPerformed
+
     private void mnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnClienteActionPerformed
         new ClienteView().setVisible(true);
     }//GEN-LAST:event_mnClienteActionPerformed
@@ -91,10 +109,6 @@ public class MenuPrincipalView extends javax.swing.JFrame {
     private void mnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnUsuarioActionPerformed
         new UsuarioView().setVisible(true);
     }//GEN-LAST:event_mnUsuarioActionPerformed
-
-    private void mnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnSairActionPerformed
-        dispose();
-    }//GEN-LAST:event_mnSairActionPerformed
 
     /**
      * @param args the command line arguments
@@ -126,17 +140,17 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuPrincipalView().setVisible(true);
+                new LoginView().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu MnCadastro;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenu mnCliente;
+    private javax.swing.JMenuBar itemUsuario;
+    private javax.swing.JMenuItem mnCliente;
     private javax.swing.JMenuItem mnSair;
     private javax.swing.JMenu mnSobre;
-    private javax.swing.JMenu mnUsuario;
+    private javax.swing.JMenuItem mnUsuario;
     // End of variables declaration//GEN-END:variables
 }

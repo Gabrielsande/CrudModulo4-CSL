@@ -1,6 +1,7 @@
 
 package br.ulbra.DAO;
 
+import static br.ulbra.DAO.AbstractDAO.getConnection;
 import br.ulbra.model.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,13 +24,13 @@ public class UsuarioDAO extends AbstractDAO implements CrudRepository<Usuario>{
 
     @Override
     public void salvar(Usuario u) throws SQLException {
-        String sql = "INSERT INTO usuario (login, senha, nome, ativo) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO usuario (nome, login, senha, ativo) VALUES (?, ?, ?, ?)";
         try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1, u.getLogin());
-            ps.setString(2, criptografarSenha(u.getSenha())); // Hash seguro
-            ps.setString(3, u.getNome());
+            ps.setString(1, u.getNome());
+            ps.setString(2, u.getLogin()); // Hash seguro
+            ps.setString(3, criptografarSenha(u.getSenha()));
             ps.setBoolean(4, u.isAtivo());
 
             int affected = ps.executeUpdate();
@@ -43,7 +44,7 @@ public class UsuarioDAO extends AbstractDAO implements CrudRepository<Usuario>{
 
     @Override
     public Usuario buscarPorId(int id) throws SQLException {
-        String sql = "SELECT id, login, senha, nome, ativo FROM usuario WHERE id = ?";
+        String sql = "SELECT id, nome, login, senha, ativo FROM usuario WHERE id = ?";
         try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -52,9 +53,9 @@ public class UsuarioDAO extends AbstractDAO implements CrudRepository<Usuario>{
                 if (rs.next()) {
                     return new Usuario(
                         rs.getInt("id"),
-                        rs.getString("login"),
-                        rs.getString("senha"), // Hash armazenado
                         rs.getString("nome"),
+                        rs.getString("login"),
+                        rs.getString("senha"), // Hash armazenado               
                         rs.getBoolean("ativo")
                     );
                 }
@@ -65,7 +66,7 @@ public class UsuarioDAO extends AbstractDAO implements CrudRepository<Usuario>{
 
     @Override
     public List<Usuario> listar() throws SQLException {
-        String sql = "SELECT id, login, nome, ativo FROM usuario ORDER BY nome";
+        String sql = "SELECT id, nome, login, ativo FROM usuario ORDER BY nome";
         List<Usuario> lista = new ArrayList<>();
 
         try (Connection con = getConnection();
@@ -87,7 +88,7 @@ public class UsuarioDAO extends AbstractDAO implements CrudRepository<Usuario>{
 
     @Override
     public void atualizar(Usuario u) throws SQLException {
-        String sql = "UPDATE usuario SET login = ?, nome = ?, ativo = ? WHERE id = ?";
+        String sql = "UPDATE usuario SET nome = ?, login = ?, ativo = ? WHERE id = ?";
         try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 

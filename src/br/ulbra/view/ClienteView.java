@@ -1,25 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.ulbra.view;
 
 import br.ulbra.controller.ClienteController;
 import br.ulbra.model.Cliente;
+import br.ulbra.model.Usuario;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author aluno.saolucas
- */
 public class ClienteView extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ClienteView
-     */
+    
     public ClienteView() {
         initComponents();
         controller = new ClienteController();
@@ -27,6 +18,10 @@ public class ClienteView extends javax.swing.JFrame {
         initTableModel();
         atualizarTabela();
         setBotoes(0);
+    }
+
+    ClienteView(Usuario usuarioLogado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void setBotoes(int op) {
