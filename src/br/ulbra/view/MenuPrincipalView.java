@@ -41,6 +41,7 @@ public class MenuPrincipalView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
         itemUsuario = new javax.swing.JMenuBar();
         MnCadastro = new javax.swing.JMenu();
         mnCliente = new javax.swing.JMenuItem();
@@ -49,6 +50,8 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         mnSair = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\aluno.saolucas\\Downloads\\logoCrud.png")); // NOI18N
 
         MnCadastro.setText("Cadastros");
 
@@ -88,11 +91,17 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(136, 136, 136)
+                .addComponent(jLabel1)
+                .addContainerGap(136, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(72, 72, 72)
+                .addComponent(jLabel1)
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
         pack();
@@ -148,6 +157,7 @@ public class MenuPrincipalView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu MnCadastro;
     private javax.swing.JMenuBar itemUsuario;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuItem mnCliente;
     private javax.swing.JMenuItem mnSair;
     private javax.swing.JMenu mnSobre;

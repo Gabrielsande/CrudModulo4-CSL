@@ -23,6 +23,7 @@ public class UsuarioView extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tblUsuario.getModel();
         model.setRowCount(0);  // apaga todas as linhas;
     }
+    
     private UsuarioController controller;
 
     private void atualizarTabela() {
